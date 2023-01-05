@@ -1,20 +1,29 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { fetchCityWeather } from "../../weather.actions.ts";
+import { useDispatch } from "react-redux";
+import { AnyAction } from "redux";
+
+import { fetchCityWeather } from "../../weather.actions";
+
 import {
   InputContainer,
   TextInput,
   SearchButton,
   Icon,
-} from "./SearchInput.styled.tsx";
+} from "./SearchInput.styled";
 
-const SearchInput = ({ fetchCityWeather }) => {
+const SearchInput = () => {
   const [inputValue, setInputValue] = useState("");
+  const dispatch = useDispatch();
 
   const handleChange = (event) => setInputValue(event.target.value);
-  const onKeyDown = (event) => {
+
+  const handleCitySearch = () => {
+    dispatch(fetchCityWeather(inputValue) as unknown as AnyAction);
+    setInputValue("");
+  };
+  const handleKeyDown = (event) => {
     if (event.keyCode === 13) {
-      fetchCityWeather(inputValue);
+      handleCitySearch();
     }
   };
 
@@ -24,28 +33,18 @@ const SearchInput = ({ fetchCityWeather }) => {
         placeholder="Location"
         inputProps={{ "aria-label": "search city" }}
         onChange={handleChange}
-        onKeyDown={onKeyDown}
+        onKeyDown={handleKeyDown}
+        value={inputValue}
       />
       <SearchButton
         type="button"
         aria-label="search"
-        onClick={() => fetchCityWeather(inputValue)}
+        onClick={handleCitySearch}
       >
         <Icon />
       </SearchButton>
     </InputContainer>
   );
 };
-const mapState = (state) => {
-  return {
-    isFetching: state.cities,
-  };
-};
-
-const mapDispatch = {
-  fetchCityWeather,
-};
-
-const connector = connect(mapState, mapDispatch);
 
 export default SearchInput;

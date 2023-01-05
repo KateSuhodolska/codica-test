@@ -4,5 +4,6 @@
 }
 
 body {
-    background-color: #f4f9fc;
+    height: 100% !important;
+    background: linear-gradient(#efefef, #b9deed) no-repeat;
 }

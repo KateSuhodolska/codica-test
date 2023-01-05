@@ -1,20 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
+import SearchInput from "./SearchInput/index";
+import CityCards from "./CityCards/index";
+import DetailWeatherCard from "./DetailWeatherCard";
 
-import SearchInput from "./SearchInput/index.tsx";
-import CityCard from "./CityCard/index.tsx";
-import { Layout, CardContainer } from "./Page.styled.tsx";
+import { Layout, MainInfoContainer, CardContainer } from "./Page.styled";
 
 const Page = () => {
+  const [weatherCardIsOpen, setWeatherCardIsOpen] = useState(false);
+  const [cityData, setCityData] = useState<Array<string | number>>([]);
+  const [cityCoord, setCityCoord] = useState<number[]>([]);
+
   return (
     <Layout>
-      <SearchInput />
-      <CardContainer>
-        <CityCard />
-        <CityCard />
-        <CityCard />
-        <CityCard />
-        <CityCard />
-      </CardContainer>
+      <DetailWeatherCard
+        weatherCardIsOpen={weatherCardIsOpen}
+        setWeatherCardIsOpen={setWeatherCardIsOpen}
+        cityData={cityData}
+        cityCoord={cityCoord}
+      />
+      <MainInfoContainer>
+        <SearchInput />
+        <CardContainer>
+          <CityCards
+            setWeatherCardIsOpen={setWeatherCardIsOpen}
+            cityData={cityData}
+            setCityData={setCityData}
+            setCityCoord={setCityCoord}
+          />
+        </CardContainer>
+      </MainInfoContainer>
     </Layout>
   );
 };

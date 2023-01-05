@@ -1,7 +1,6 @@
 import {
   Card,
   Container,
-  CardActions,
   CardContent,
   Button,
   Typography,
@@ -13,7 +12,7 @@ import { styled } from "@mui/system";
 export const CardContainer = styled(Card)(({ theme }) => ({
   position: "relative",
   width: "150px",
-  marginRight: "30px",
+  margin: "0 15px 30px",
   boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
 }));
 
@@ -56,4 +55,12 @@ export const Icon = styled(CloseIcon)(({ theme }) => ({
   },
 }));
 
-export const Title = styled(Typography)(({ theme }) => ({}));
+export const Title = styled(Typography)(({ theme }) => ({
+  width: "130px",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  textAlign: "center",
+}));
+
+export const Text = styled(Typography)(({ theme }) => ({}));

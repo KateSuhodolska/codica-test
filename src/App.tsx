@@ -1,12 +1,13 @@
 import React from "react";
-import Page from "./components/Page.tsx";
-import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
+import Page from "./components/Page";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const App = () => {
   return (
-    <CssVarsProvider>
+    <Provider store={store}>
       <Page />
-    </CssVarsProvider>
+    </Provider>
   );
 };
 

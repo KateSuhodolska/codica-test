@@ -19,8 +19,8 @@ export const TextInput = styled(InputBase)(({ theme }) => ({
   padding: "0 15px",
   fontSize: "1.25rem",
   borderRadius: 20,
-  "-webkitBoxShadow": " -4px 4px 5px 0px rgba(0,0,0,0.1)",
-  "-mozBoxShadow": "-4px 4px 5px 0px rgba(0,0,0,0.1)",
+  WebkitBoxShadow: " -4px 4px 5px 0px rgba(0,0,0,0.1)",
+  MozBoxShadow: "-4px 4px 5px 0px rgba(0,0,0,0.1)",
   boxShadow: "-4px 4px 5px 0px rgba(0,0,0,0.1)",
 }));
 
