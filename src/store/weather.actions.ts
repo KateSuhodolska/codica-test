@@ -1,6 +1,6 @@
-import { getCityWeather } from "./gateway/cityGateway";
-import { getHourlyWeather } from "./gateway/hourlyWeatherGateway";
-import { getItem, setItem } from "./utils";
+import { getCityWeather } from "../gateway/cityGateway";
+import { getHourlyWeather } from "../gateway/hourlyWeatherGateway";
+import { getItem, setItem } from "../constants/utils";
 
 export const START_FETCHING_CITY = "START_FETCHING_CITY";
 export const CITY_DATA_FETCHED = "CITY_DATA_FETCHED";
@@ -9,6 +9,7 @@ export const WEATHER_DATA_FETCHED = "WEATHER_DATA_FETCHED";
 export const GET_CITIES_LIST = "GET_CITIES_LIST";
 export const DELETE_CITY = "DELETE_CITY";
 export const GET_WEATHER_TODAY = "GET_WEATHER_TODAY";
+export const DETAIL_WEATHER_CARD_STATE = "DETAIL_WEATHER_CARD_STATE";
 
 export const startCityFetching = () => {
   return {
@@ -45,6 +46,13 @@ export const getWeatherToday = (weatherData) => {
   return {
     type: GET_WEATHER_TODAY,
     payload: weatherData,
+  };
+};
+
+export const setDetailWeatherCardState = (state) => {
+  return {
+    type: DETAIL_WEATHER_CARD_STATE,
+    payload: state,
   };
 };
 

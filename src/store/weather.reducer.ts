@@ -1,5 +1,5 @@
-import { IState } from "./types";
-import { getItem } from "./utils";
+import { IState } from "../constants/types";
+import { getItem } from "../constants/utils";
 import {
   START_FETCHING_CITY,
   CITY_DATA_FETCHED,
@@ -8,6 +8,7 @@ import {
   GET_CITIES_LIST,
   DELETE_CITY,
   GET_WEATHER_TODAY,
+  DETAIL_WEATHER_CARD_STATE,
 } from "./weather.actions";
 
 const initState: IState = {
@@ -15,6 +16,7 @@ const initState: IState = {
   isWeatherFetching: false,
   cities: getItem("cities") || [],
   hourlyWeather: [],
+  isDetailWeatherCardIsOpen: false,
 };
 
 export const weatherReducer = (state = initState, action) => {
@@ -61,6 +63,12 @@ export const weatherReducer = (state = initState, action) => {
       return {
         ...state,
         hourlyWeather: action.payload.data.list,
+      };
+
+    case DETAIL_WEATHER_CARD_STATE:
+      return {
+        ...state,
+        isDetailWeatherCardIsOpen: action.payload,
       };
 
     default:

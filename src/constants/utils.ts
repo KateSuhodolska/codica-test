@@ -3,3 +3,8 @@ export const getItem = (key: string) =>
 
 export const setItem = (key: string, value: any) =>
   localStorage.setItem(key, JSON.stringify(value));
+
+export const temperatureFormat = (value: number) => {
+  const result = Math.round(value) - 273;
+  return result > 0 ? `+${result}°` : `${result}°`;
+};

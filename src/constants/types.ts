@@ -81,4 +81,5 @@ export interface IState {
   isWeatherFetching: boolean;
   cities: ICity[];
   hourlyWeather: IHourlyWeather[];
+  isDetailWeatherCardIsOpen: boolean;
 }

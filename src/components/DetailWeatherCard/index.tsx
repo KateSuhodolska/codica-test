@@ -1,32 +1,27 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { AnyAction } from "redux";
 import { useSelector, useDispatch } from "react-redux";
 
 import moment from "moment";
-import { weatherIcon } from "../../constants";
-import { fetchHourlyWeather } from "../../weather.actions";
-import { IState } from "../../types";
-
+import { weatherIcons } from "../../constants/weatherIcons";
 import {
-  WeatherContainer,
-  WeatherContent,
-  CloseButton,
-  Icon,
-  Title,
-  Paragraph,
-  TemperatureChart,
-  TemperatureSynopsis,
-  Skeleton,
-} from "./DetailWeatherCard.styled";
+  fetchHourlyWeather,
+  setDetailWeatherCardState,
+} from "../../store/weather.actions";
+import { temperatureFormat } from "../../constants/utils";
+import { IState } from "../../constants/types";
 
-const DetailWeatherCard = ({
-  weatherCardIsOpen,
-  setWeatherCardIsOpen,
-  cityData,
-  cityCoord,
-}) => {
+import * as Styled from "./DetailWeatherCard.styled";
+
+type Props = {
+  cityData: (string | number)[];
+  cityCoord: number[];
+};
+
+const DetailWeatherCard: FC<Props> = ({ cityData, cityCoord }) => {
   const dispatch = useDispatch();
   const hourlyWeather = useSelector((state: IState) => state.hourlyWeather);
+
   const isWeatherFetching = useSelector(
     (state: IState) => state.isWeatherFetching
   );
@@ -43,83 +38,64 @@ const DetailWeatherCard = ({
   const weatherToday = hourlyWeather.filter((el) =>
     el["dt_txt"].includes(currentDay)
   );
-
   const currentWeather = weatherToday[0];
 
-  const temperature = (value: number) => {
-    const result = Math.round(value) - 273;
-    return result > 0 ? `+${result}°` : `${result}°`;
-  };
+  return isWeatherFetching ? (
+    <span style={{ width: "420px" }}>
+      <Styled.Skeleton variant="rounded" animation="wave" />
+    </span>
+  ) : (
+    <Styled.WeatherContainer>
+      <Styled.CloseButton
+        onClick={() => dispatch(setDetailWeatherCardState(false))}
+      >
+        <Styled.Icon />
+      </Styled.CloseButton>
+      <Styled.Title>{cityData[0]}</Styled.Title>
+      <Styled.Paragraph>{currentDay}</Styled.Paragraph>
+      <Styled.ImgContainer>
+        <img
+          src={weatherIcons[currentWeather?.weather[0].main]}
+          alt="weather icon"
+          style={{ width: "120px", height: "120px" }}
+        />
+      </Styled.ImgContainer>
 
-  return (
-    weatherCardIsOpen &&
-    (isWeatherFetching ? (
-      <span style={{ width: "420px" }}>
-        <Skeleton variant="rounded" animation="wave" />
-      </span>
-    ) : (
-      <WeatherContainer>
-        <CloseButton onClick={() => setWeatherCardIsOpen(false)}>
-          <Icon />
-        </CloseButton>
-        <Title>{cityData[0]}</Title>
-        <Paragraph>{currentDay}</Paragraph>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          <img
-            src={weatherIcon[currentWeather?.weather[0].main]}
-            alt="weather icon"
-            style={{ width: "120px", height: "120px" }}
-          />
-        </div>
-
-        <Paragraph style={{ marginBottom: "20px" }}>
-          {currentWeather?.weather[0].description}
-        </Paragraph>
-        <Paragraph>
-          <b>Temp:</b>
-          {temperature(currentWeather?.main.temp)}
-        </Paragraph>
-        <Paragraph>
-          <b>Feels like:</b> {temperature(currentWeather?.main.feels_like)}
-        </Paragraph>
-        <Paragraph>
-          <b>Humidity:</b> {currentWeather?.main.humidity}
-        </Paragraph>
-        <Paragraph>
-          <b>Pressure:</b> {currentWeather?.main.pressure}
-        </Paragraph>
-        <Paragraph>
-          <b>Wind speed:</b> {`${currentWeather?.wind.speed} m/s`}
-        </Paragraph>
-        <TemperatureChart>
-          {weatherToday.map((el) => (
-            <span
-              key={el.dt}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: "250px",
-              }}
+      <Styled.Paragraph style={{ marginBottom: "20px" }}>
+        {currentWeather?.weather[0].description}
+      </Styled.Paragraph>
+      <Styled.Paragraph>
+        <b>Temp: &nbsp;</b>
+        {temperatureFormat(currentWeather?.main.temp)}
+      </Styled.Paragraph>
+      <Styled.Paragraph>
+        <b>Feels like: &nbsp;</b>
+        {temperatureFormat(currentWeather?.main.feels_like)}
+      </Styled.Paragraph>
+      <Styled.Paragraph>
+        <b>Humidity: &nbsp;</b> {currentWeather?.main.humidity}
+      </Styled.Paragraph>
+      <Styled.Paragraph>
+        <b>Pressure: &nbsp;</b> {currentWeather?.main.pressure}
+      </Styled.Paragraph>
+      <Styled.Paragraph>
+        <b>Wind speed: &nbsp;</b> {`${currentWeather?.wind.speed} m/s`}
+      </Styled.Paragraph>
+      <Styled.TemperatureChart>
+        {weatherToday.map((el) => (
+          <Styled.TemperatureChartContent key={el.dt}>
+            <Styled.TemperatureSynopsis
+              style={{ marginBottom: `${Math.round(el.main.temp) - 273}px` }}
             >
-              <TemperatureSynopsis
-                style={{ marginBottom: `${Math.round(el.main.temp) - 273}px` }}
-              >
-                {temperature(el.main.temp)}
-              </TemperatureSynopsis>
-              <WeatherContent>
-                {el["dt_txt"].split(" ")[1].slice(0, 5)}
-              </WeatherContent>
-            </span>
-          ))}
-        </TemperatureChart>
-      </WeatherContainer>
-    ))
+              {temperatureFormat(el.main.temp)}
+            </Styled.TemperatureSynopsis>
+            <Styled.TemperatureTime>
+              {el["dt_txt"].split(" ")[1].slice(0, 5)}
+            </Styled.TemperatureTime>
+          </Styled.TemperatureChartContent>
+        ))}
+      </Styled.TemperatureChart>
+    </Styled.WeatherContainer>
   );
 };
 

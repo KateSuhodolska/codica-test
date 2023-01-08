@@ -1,35 +1,37 @@
 import React, { useState } from "react";
-import SearchInput from "./SearchInput/index";
-import CityCards from "./CityCards/index";
-import DetailWeatherCard from "./DetailWeatherCard";
+import { useSelector } from "react-redux";
 
-import { Layout, MainInfoContainer, CardContainer } from "./Page.styled";
+import SearchInput from "./SearchInput";
+import WeatherCards from "./WeatherCards";
+import DetailWeatherCard from "./DetailWeatherCard";
+import { IState } from "../constants/types";
+
+import * as Styled from "./Page.styled";
 
 const Page = () => {
-  const [weatherCardIsOpen, setWeatherCardIsOpen] = useState(false);
   const [cityData, setCityData] = useState<Array<string | number>>([]);
   const [cityCoord, setCityCoord] = useState<number[]>([]);
 
+  const isDetailWeatherCardIsOpen = useSelector(
+    (state: IState) => state.isDetailWeatherCardIsOpen
+  );
+
   return (
-    <Layout>
-      <DetailWeatherCard
-        weatherCardIsOpen={weatherCardIsOpen}
-        setWeatherCardIsOpen={setWeatherCardIsOpen}
-        cityData={cityData}
-        cityCoord={cityCoord}
-      />
-      <MainInfoContainer>
+    <Styled.Layout>
+      {isDetailWeatherCardIsOpen && (
+        <DetailWeatherCard cityData={cityData} cityCoord={cityCoord} />
+      )}
+      <Styled.MainInfoContainer>
         <SearchInput />
-        <CardContainer>
-          <CityCards
-            setWeatherCardIsOpen={setWeatherCardIsOpen}
+        <Styled.CardContainer>
+          <WeatherCards
             cityData={cityData}
             setCityData={setCityData}
             setCityCoord={setCityCoord}
           />
-        </CardContainer>
-      </MainInfoContainer>
-    </Layout>
+        </Styled.CardContainer>
+      </Styled.MainInfoContainer>
+    </Styled.Layout>
   );
 };
 
